@@ -95,7 +95,6 @@ class Life:
         self.draw_grid()
         self.window.after_idle(self.animate)
         self.window.mainloop()
-        #self.__grid.tick()
 
 
 if __name__ == '__main__':
