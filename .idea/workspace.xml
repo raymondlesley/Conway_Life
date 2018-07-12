@@ -17,8 +17,8 @@
       <file leaf-file-name="life.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/life.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="13" column="43" selection-start-line="13" selection-start-column="43" selection-end-line="13" selection-end-column="43" />
+            <state relative-caret-position="374">
+              <caret line="22" selection-start-line="22" selection-end-line="22" />
               <folding>
                 <element signature="e#1301#1322#0" expanded="true" />
               </folding>
@@ -38,8 +38,8 @@
       <file leaf-file-name="grid.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/grid.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+            <state>
+              <caret lean-forward="true" />
             </state>
           </provider>
         </entry>
@@ -76,7 +76,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -88,6 +87,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="RunDashboard">
@@ -188,7 +188,21 @@
       <option name="project" value="LOCAL" />
       <updated>1531314190048</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Pre-populate checked_cells with current grid (avoid re-checking!)">
+      <created>1531396720128</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1531396720128</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Optimise drawing (start from list of live cells)&#10;EVEN FASTER STILL!!">
+      <created>1531398609079</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1531398609079</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -219,7 +233,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Refactor: use dict in place of 2D array&#10;(_MUCH_ quicker)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor: use dict in place of 2D array&#10;(_MUCH_ quicker)" />
+    <MESSAGE value="Pre-populate checked_cells with current grid (avoid re-checking!)" />
+    <MESSAGE value="Optimise drawing (start from list of live cells)&#10;EVEN FASTER STILL!!" />
+    <option name="LAST_COMMIT_MESSAGE" value="Optimise drawing (start from list of live cells)&#10;EVEN FASTER STILL!!" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -227,6 +243,30 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/life.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
+          <folding>
+            <element signature="e#1301#1322#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cell.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="10" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grid.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="33" lean-forward="true" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/life.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -491,8 +531,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/life.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="13" column="43" selection-start-line="13" selection-start-column="43" selection-end-line="13" selection-end-column="43" />
+        <state relative-caret-position="374">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
           <folding>
             <element signature="e#1301#1322#0" expanded="true" />
           </folding>
@@ -501,8 +541,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/grid.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        <state>
+          <caret lean-forward="true" />
         </state>
       </provider>
     </entry>

@@ -55,7 +55,7 @@ class Grid:
     def count_live_neighbours(self, row, col):
         num_neighbours = 0
         neighbours = self.get_neighbours(row, col)
-        for neighbour, dummy in neighbours.items():  # TODO: can you just get keys?
+        for neighbour in neighbours.keys():
             if self.is_alive(neighbour[0], neighbour[1]):
                 num_neighbours += 1
         return num_neighbours
@@ -73,7 +73,7 @@ class Grid:
         # 1.2 check neighbouring cells ... should they spawn?
         checked_cells = copy.deepcopy(self.__grid)
         new_grid = copy.deepcopy(self.__grid)
-        for coords, cell in self.__grid.items():  # TODO: can you just get keys?
+        for coords in self.__grid.keys():
             live_neighbours = self.count_live_neighbours(coords[0], coords[1])
             if live_neighbours < 2:   # rule 1: <2 ... cell dies
                 del new_grid[coords]
@@ -82,7 +82,7 @@ class Grid:
             checked_cells[coords] = 1
 
             neighbours = self.get_neighbours(coords[0], coords[1])
-            for coords, neighbour in neighbours.items():  # TODO: can you just get keys?
+            for coords in neighbours.keys():
                 if coords in checked_cells: continue  # already checked
                 live_neighbours = self.count_live_neighbours(coords[0], coords[1])
                 if live_neighbours == 3:  # rule 4: ==3 ... cell born
