@@ -80,10 +80,9 @@ class Life:
 
     def draw_grid(self):
         self.canvas.delete('all')
-        for row in range(self.rows):
-            for col in range(self.cols):
-                if self.__grid.is_alive(row, col):
-                    self.draw_cell(row, col)
+        live_cells = self.__grid.get_live_cells()
+        for cell in live_cells:
+            self.draw_cell(cell[0], cell[1])
 
     def animate(self):
         self.__grid.tick()

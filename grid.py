@@ -60,6 +60,12 @@ class Grid:
                 num_neighbours += 1
         return num_neighbours
 
+    def get_live_cells(self):
+        live_cells = []
+        for cell in self.__grid.keys():
+            live_cells.append(cell)
+        return live_cells
+
     def tick(self):
         # Compute next generation of cells
         # 1. go through each live cell
