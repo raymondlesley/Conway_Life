@@ -65,7 +65,7 @@ class Grid:
         # 1. go through each live cell
         # 1.1 apply rules 1 and 3 to see if it dies
         # 1.2 check neighbouring cells ... should they spawn?
-        checked_cells = {}
+        checked_cells = copy.deepcopy(self.__grid)
         new_grid = copy.deepcopy(self.__grid)
         for coords, cell in self.__grid.items():  # TODO: can you just get keys?
             live_neighbours = self.count_live_neighbours(coords[0], coords[1])
