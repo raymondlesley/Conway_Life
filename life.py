@@ -49,10 +49,11 @@ class Life:
 
         self.window = Tk()
         self.canvas = Canvas(self.window, width=self.x, height=self.y, bg="#000000")
+        self.cell_count = self.canvas.create_text((0, 0), text="# cells")
         self.canvas.pack()
 
     def create_test_scenario(self):
-        seed_data = (
+        seed_data = [
             (1, 1), (2, 2), (2, 3), (3, 1), (3, 2),
             (18, 14), (18, 15), (19, 14), (19, 15),
             (11, 14), (11, 15), (12, 14), (12, 15),
@@ -62,16 +63,17 @@ class Life:
             (53, 53), (55, 53),
             (52, 54), (53, 54), (55, 54), (56, 54),
             (51, 53), (52, 51), (52, 53), (53, 52), (53, 53)
-        )
+        ]
 
         # random grid
-        seed_data = []
+        # seed_data = []
         for row in range(self.rows//3, self.rows//3*2):
             for col in range(self.cols//3, self.cols//3*2):
                 if random.randint(0, 5) > 2:
                     seed_data.append((row, col))
         for cell in seed_data:
             self.__grid.set_alive(cell)
+        self.generation = 0
 
     def draw_cell(self, row, col):
         top_left_x = col * self.x_scale
@@ -97,7 +99,9 @@ class Life:
 
     def animate(self):
         self.__grid.tick()
+        self.generation += 1
         self.draw_grid()
+        self.cell_count = self.canvas.create_text((10, 10), anchor="nw", fill="white", text=("%d cells / gen: %d" % (self.__grid.num_cells(), self.generation)))
         self.window.update()
         self.window.after(0, self.animate)
 

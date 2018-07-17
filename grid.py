@@ -6,6 +6,7 @@ Grid - grid array of Comway's Game of Life Cells
 
 from cell import Cell
 import copy
+import random
 
 class Grid:
     def __init__(self, rows, cols):
@@ -14,7 +15,10 @@ class Grid:
         self.__grid = {}
 
     def __repr__(self):
-        return "<Grid(%dx%d)>" % (self.__rows, self.__cols)
+        return "<Grid(%dx%d, %d cells)>" % (self.__rows, self.__cols, self.num_cells())
+
+    def num_cells(self):
+        return len(self.__grid)
 
     def set_alive(self, coords):
         self.__grid[coords] = Cell(Cell.Alive)
@@ -75,6 +79,8 @@ class Grid:
             live_neighbours = self.count_live_neighbours(coords)
             if live_neighbours < 2:   # rule 1: <2 ... cell dies
                 del new_grid[coords]
+            #elif live_neighbours == 4:  # MADEUP rule ... random!
+            #    if random.randint(0, 2): del new_grid[coords]
             elif live_neighbours > 3:   # rule 3: >3 ... cell dies
                 del new_grid[coords]
             checked_cells[coords] = 1
