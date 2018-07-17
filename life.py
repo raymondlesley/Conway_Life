@@ -20,15 +20,19 @@ Rules
     continue to be applied repeatedly to create further generations.
 '''
 
+# TODO: implement mouse clicks to stop/start/step evolution
+
 from grid import Grid
 from tkinter import Tk, Canvas, mainloop
+import _thread
+import random
 
 class Life:
     def __init__(self, rows, cols):
         self.__grid = Grid(rows, cols)
         # window size
-        self.x = 640
-        self.y = 480
+        self.x = 1024 # 640
+        self.y = 768 # 480
         self.rows = rows
         self.cols = cols
         self.y_scale = self.y / rows
@@ -41,26 +45,33 @@ class Life:
         self.ya = -1.27
         self.yb = 1.27
 
+        self.lock = _thread.allocate_lock()
+
         self.window = Tk()
         self.canvas = Canvas(self.window, width=self.x, height=self.y, bg="#000000")
         self.canvas.pack()
 
     def create_test_scenario(self):
-        self.__grid.set_alive(1, 1)
-        self.__grid.set_alive(2, 2)
-        self.__grid.set_alive(2, 3)
-        self.__grid.set_alive(3, 1)
-        self.__grid.set_alive(3, 2)
+        seed_data = (
+            (1, 1), (2, 2), (2, 3), (3, 1), (3, 2),
+            (18, 14), (18, 15), (19, 14), (19, 15),
+            (11, 14), (11, 15), (12, 14), (12, 15),
+            # from https://stackoverflow.com/questions/9598552/a-suitable-game-of-life-seed-for-testing
+            (52, 51), (53, 51), (55, 51), (56, 51),
+            (53, 52), (55, 52),
+            (53, 53), (55, 53),
+            (52, 54), (53, 54), (55, 54), (56, 54),
+            (51, 53), (52, 51), (52, 53), (53, 52), (53, 53)
+        )
 
-        self.__grid.set_alive(18, 14)
-        self.__grid.set_alive(18, 15)
-        self.__grid.set_alive(19, 14)
-        self.__grid.set_alive(19, 15)
-
-        self.__grid.set_alive(11, 14)
-        self.__grid.set_alive(11, 15)
-        self.__grid.set_alive(12, 14)
-        self.__grid.set_alive(12, 15)
+        # random grid
+        seed_data = []
+        for row in range(self.rows//3, self.rows//3*2):
+            for col in range(self.cols//3, self.cols//3*2):
+                if random.randint(0, 5) > 2:
+                    seed_data.append((row, col))
+        for cell in seed_data:
+            self.__grid.set_alive(cell)
 
     def draw_cell(self, row, col):
         top_left_x = col * self.x_scale
@@ -98,4 +109,5 @@ class Life:
 
 
 if __name__ == '__main__':
-    Life(80, 100).play()
+    scale = 5
+    Life(768//scale, 1024//scale).play()

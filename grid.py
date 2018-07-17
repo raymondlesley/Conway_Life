@@ -2,7 +2,6 @@
 Grid - grid array of Comway's Game of Life Cells
 '''
 
-# TODO: refactor calls to accept coords tuples instead of row, col
 # TODO: would a linked cell be quicker than discovery?
 
 from cell import Cell
@@ -17,22 +16,21 @@ class Grid:
     def __repr__(self):
         return "<Grid(%dx%d)>" % (self.__rows, self.__cols)
 
-    def set_alive(self, row, col):
-        self.__grid[(row, col)] = Cell(Cell.Alive)
+    def set_alive(self, coords):
+        self.__grid[coords] = Cell(Cell.Alive)
 
-    def set_void(self, row, col):
-        key = (row, col)
-        if key in self.__grid: del self.__grid[key]
+    def set_void(self, coords):
+        if coords in self.__grid: del self.__grid[coords]
 
-    def is_alive(self, row, col):
-        key = (row, col)
-        return key in self.__grid and self.__grid[key].is_alive()
+    def is_alive(self, coords):
+        return coords in self.__grid and self.__grid[coords].is_alive()
 
-    def is_void(self, row, col):
-        key = (row, col)
-        return not key in self.__grid or self.__grid[key].is_void()
+    def is_void(self, coords):
+        return not coords in self.__grid or self.__grid[coords].is_void()
 
-    def get_neighbours(self, row, col):
+    def get_neighbours(self, coords):
+        row = coords[0]
+        col = coords[1]
         neighbours = {}
         if row > 0:
             neighbours[(row - 1, col)] = 1
@@ -52,11 +50,11 @@ class Grid:
             neighbours[(row, col + 1)] = 1
         return neighbours
 
-    def count_live_neighbours(self, row, col):
+    def count_live_neighbours(self, coords):
         num_neighbours = 0
-        neighbours = self.get_neighbours(row, col)
+        neighbours = self.get_neighbours(coords)
         for neighbour in neighbours.keys():
-            if self.is_alive(neighbour[0], neighbour[1]):
+            if self.is_alive(neighbour):
                 num_neighbours += 1
         return num_neighbours
 
@@ -74,17 +72,17 @@ class Grid:
         checked_cells = copy.deepcopy(self.__grid)
         new_grid = copy.deepcopy(self.__grid)
         for coords in self.__grid.keys():
-            live_neighbours = self.count_live_neighbours(coords[0], coords[1])
+            live_neighbours = self.count_live_neighbours(coords)
             if live_neighbours < 2:   # rule 1: <2 ... cell dies
                 del new_grid[coords]
             elif live_neighbours > 3:   # rule 3: >3 ... cell dies
                 del new_grid[coords]
             checked_cells[coords] = 1
 
-            neighbours = self.get_neighbours(coords[0], coords[1])
+            neighbours = self.get_neighbours(coords)
             for coords in neighbours.keys():
                 if coords in checked_cells: continue  # already checked
-                live_neighbours = self.count_live_neighbours(coords[0], coords[1])
+                live_neighbours = self.count_live_neighbours(coords)
                 if live_neighbours == 3:  # rule 4: ==3 ... cell born
                     new_grid[coords] = Cell(Cell.Alive)
                 checked_cells[coords] = 1
@@ -92,7 +90,7 @@ class Grid:
         self.__grid = new_grid
 
     def as_grid_string(self):
-        return '\n'.join([''.join(['#' if self.is_alive(row, col) else ' ' for row in range(self.__rows)]) for col in range(self.__cols)])
+        return '\n'.join([''.join(['#' if self.is_alive((row, col)) else ' ' for row in range(self.__rows)]) for col in range(self.__cols)])
 
 ## ####################################################################### ##
 
@@ -101,47 +99,47 @@ import unittest
 class CellTests(unittest.TestCase):
     def create_test_scenario(self):
         grid = Grid(10,10)
-        grid.set_alive(1, 1)
-        grid.set_alive(2, 2)
-        grid.set_alive(2, 3)
-        grid.set_alive(3, 1)
-        grid.set_alive(3, 2)
+        grid.set_alive((1, 1))
+        grid.set_alive((2, 2))
+        grid.set_alive((2, 3))
+        grid.set_alive((3, 1))
+        grid.set_alive((3, 2))
         return grid
 
     def test_create_grid(self):
         grid = self.create_test_scenario()
         self.assertTrue(grid)
-        self.assertEqual(grid.count_live_neighbours(0, 0), 1)
-        self.assertEqual(grid.count_live_neighbours(0, 0), 1)
-        self.assertEqual(grid.count_live_neighbours(0, 1), 1)
-        self.assertEqual(grid.count_live_neighbours(0, 2), 1)
-        self.assertEqual(grid.count_live_neighbours(0, 3), 0)
-        self.assertEqual(grid.count_live_neighbours(0, 4), 0)
-        self.assertEqual(grid.count_live_neighbours(1, 0), 1)
-        self.assertEqual(grid.count_live_neighbours(1, 2), 3)
-        self.assertEqual(grid.count_live_neighbours(1, 3), 2)
-        self.assertEqual(grid.count_live_neighbours(1, 4), 1)
-        self.assertEqual(grid.count_live_neighbours(2, 0), 2)
-        self.assertEqual(grid.count_live_neighbours(2, 1), 4)
-        self.assertEqual(grid.count_live_neighbours(2, 4), 1)
-        self.assertEqual(grid.count_live_neighbours(3, 0), 1)
-        self.assertEqual(grid.count_live_neighbours(3, 3), 3)
-        self.assertEqual(grid.count_live_neighbours(3, 4), 1)
-        self.assertEqual(grid.count_live_neighbours(4, 0), 1)
-        self.assertEqual(grid.count_live_neighbours(4, 1), 2)
-        self.assertEqual(grid.count_live_neighbours(4, 2), 2)
-        self.assertEqual(grid.count_live_neighbours(4, 3), 1)
-        self.assertEqual(grid.count_live_neighbours(4, 4), 0)
+        self.assertEqual(grid.count_live_neighbours((0, 0)), 1)
+        self.assertEqual(grid.count_live_neighbours((0, 0)), 1)
+        self.assertEqual(grid.count_live_neighbours((0, 1)), 1)
+        self.assertEqual(grid.count_live_neighbours((0, 2)), 1)
+        self.assertEqual(grid.count_live_neighbours((0, 3)), 0)
+        self.assertEqual(grid.count_live_neighbours((0, 4)), 0)
+        self.assertEqual(grid.count_live_neighbours((1, 0)), 1)
+        self.assertEqual(grid.count_live_neighbours((1, 2)), 3)
+        self.assertEqual(grid.count_live_neighbours((1, 3)), 2)
+        self.assertEqual(grid.count_live_neighbours((1, 4)), 1)
+        self.assertEqual(grid.count_live_neighbours((2, 0)), 2)
+        self.assertEqual(grid.count_live_neighbours((2, 1)), 4)
+        self.assertEqual(grid.count_live_neighbours((2, 4)), 1)
+        self.assertEqual(grid.count_live_neighbours((3, 0)), 1)
+        self.assertEqual(grid.count_live_neighbours((3, 3)), 3)
+        self.assertEqual(grid.count_live_neighbours((3, 4)), 1)
+        self.assertEqual(grid.count_live_neighbours((4, 0)), 1)
+        self.assertEqual(grid.count_live_neighbours((4, 1)), 2)
+        self.assertEqual(grid.count_live_neighbours((4, 2)), 2)
+        self.assertEqual(grid.count_live_neighbours((4, 3)), 1)
+        self.assertEqual(grid.count_live_neighbours((4, 4)), 0)
         print(grid.as_grid_string())
         grid.tick()
         print(grid.as_grid_string())
-        self.assertTrue(grid.is_void(1, 1))
-        self.assertTrue(grid.is_alive(1, 2))
-        self.assertTrue(grid.is_void(2, 2))
-        self.assertTrue(grid.is_alive(2, 3))
-        self.assertTrue(grid.is_alive(3, 1))
-        self.assertTrue(grid.is_alive(3, 2))
-        self.assertTrue(grid.is_alive(3, 3))
+        self.assertTrue(grid.is_void((1, 1)))
+        self.assertTrue(grid.is_alive((1, 2)))
+        self.assertTrue(grid.is_void((2, 2)))
+        self.assertTrue(grid.is_alive((2, 3)))
+        self.assertTrue(grid.is_alive((3, 1)))
+        self.assertTrue(grid.is_alive((3, 2)))
+        self.assertTrue(grid.is_alive((3, 3)))
 
 if __name__ == '__main__':
     unittest.main()
