@@ -75,13 +75,42 @@ class Life:
             self.__grid.set_alive(cell)
         self.generation = 0
 
-    def draw_cell(self, row, col):
+    def get_colour(self, age):
+        granularity = 10
+        if age < granularity:
+            return "white"
+        elif age < granularity * 2:
+            return "#eeeeee"
+        elif age < granularity * 3:
+            return "#dddddd"
+        elif age < granularity * 4:
+            return "#cccccc"
+        elif age < granularity * 5:
+            return "#bbbbbb"
+        elif age < granularity * 6:
+            return "#aaaaaa"
+        elif age < granularity * 7:
+            return "#999999"
+        elif age < granularity * 8:
+            return "#888888"
+        elif age < granularity * 9:
+            return "#777777"
+        elif age < granularity * 10:
+            return "#666666"
+        elif age < granularity * 11:
+            return "#555555"
+        elif age < granularity * 12:
+            return "#444444"
+        else:
+            return '#333333'
+
+    def draw_cell(self, row, col, cell):
         top_left_x = col * self.x_scale
         top_left_y = row * self.y_scale
         bottom_right_x = top_left_x + self.x_scale - 1
         bottom_right_y = top_left_y + self.y_scale - 1
         points = [top_left_x, top_left_y, bottom_right_x, top_left_y, bottom_right_x, bottom_right_y, top_left_x, bottom_right_y, top_left_x, top_left_y]
-        self.canvas.create_polygon(points, fill='gray')
+        self.canvas.create_polygon(points, fill=self.get_colour(cell.get_age()))
 
     def draw_empty(self, row, col):
         top_left_x = col * self.x_scale
@@ -95,7 +124,9 @@ class Life:
         self.canvas.delete('all')
         live_cells = self.__grid.get_live_cells()
         for cell in live_cells:
-            self.draw_cell(cell[0], cell[1])
+            coords = cell[0]
+            cell = cell[1]
+            self.draw_cell(coords[0], coords[1], cell)
 
     def animate(self):
         self.__grid.tick()
@@ -113,5 +144,5 @@ class Life:
 
 
 if __name__ == '__main__':
-    scale = 5
+    scale = 2
     Life(768//scale, 1024//scale).play()

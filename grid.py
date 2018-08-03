@@ -3,6 +3,7 @@ Grid - grid array of Comway's Game of Life Cells
 '''
 
 # TODO: would a linked cell be quicker than discovery?
+# TODO: wraparound world
 
 from cell import Cell
 import copy
@@ -64,7 +65,7 @@ class Grid:
 
     def get_live_cells(self):
         live_cells = []
-        for cell in self.__grid.keys():
+        for cell in self.__grid.items():
             live_cells.append(cell)
         return live_cells
 
@@ -79,6 +80,8 @@ class Grid:
             live_neighbours = self.count_live_neighbours(coords)
             if live_neighbours < 2:   # rule 1: <2 ... cell dies
                 del new_grid[coords]
+            elif live_neighbours == 2 or live_neighbours == 3:  # rule 2: =2 or 3, cell lives
+                new_grid[coords].add_age()
             #elif live_neighbours == 4:  # MADEUP rule ... random!
             #    if random.randint(0, 2): del new_grid[coords]
             elif live_neighbours > 3:   # rule 3: >3 ... cell dies
