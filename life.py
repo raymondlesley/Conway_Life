@@ -144,5 +144,5 @@ class Life:
 
 
 if __name__ == '__main__':
-    scale = 2
+    scale = 4
     Life(768//scale, 1024//scale).play()

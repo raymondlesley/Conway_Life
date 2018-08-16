@@ -3,7 +3,6 @@ Grid - grid array of Comway's Game of Life Cells
 '''
 
 # TODO: would a linked cell be quicker than discovery?
-# TODO: wraparound world
 
 from cell import Cell
 import copy
@@ -37,6 +36,8 @@ class Grid:
         row = coords[0]
         col = coords[1]
         neighbours = {}
+        '''
+        # no wraparound
         if row > 0:
             neighbours[(row - 1, col)] = 1
             if col > 0:
@@ -53,6 +54,16 @@ class Grid:
             neighbours[(row, col - 1)] = 1
         if col < (self.__cols - 1):
             neighbours[(row, col + 1)] = 1
+        '''
+        # infinite (wraparound) grid
+        neighbours[((row - 1)%self.__rows, col)] = 1                        # N
+        neighbours[((row - 1)%self.__rows, (col - 1)%self.__cols)] = 1      # NW
+        neighbours[((row - 1)%self.__rows, (col + 1)%self.__cols)] = 1      # NE
+        neighbours[(row, (col - 1)%self.__cols)] = 1                        # W
+        neighbours[(row, (col + 1)%self.__cols)] = 1                        # E
+        neighbours[((row + 1)%self.__rows, col)] = 1                        # S
+        neighbours[((row + 1)%self.__rows, (col - 1)%self.__cols)] = 1      # SW
+        neighbours[((row + 1)%self.__rows, (col + 1)%self.__cols)] = 1      # SE
         return neighbours
 
     def count_live_neighbours(self, coords):
@@ -99,14 +110,15 @@ class Grid:
         self.__grid = new_grid
 
     def as_grid_string(self):
-        return '\n'.join([''.join(['#' if self.is_alive((row, col)) else ' ' for row in range(self.__rows)]) for col in range(self.__cols)])
+        return '\n'.join([''.join(['#' if self.is_alive((row, col)) else '.' for row in range(self.__rows)]) for col in range(self.__cols)])
 
 ## ####################################################################### ##
 
 import unittest
 
 class CellTests(unittest.TestCase):
-    def create_test_scenario(self):
+    def create_test_scenario1(self):
+        # simple grid with walker from (1, 1)
         grid = Grid(10,10)
         grid.set_alive((1, 1))
         grid.set_alive((2, 2))
@@ -115,8 +127,29 @@ class CellTests(unittest.TestCase):
         grid.set_alive((3, 2))
         return grid
 
+    def create_test_scenario2(self):
+        # simple grid with block at (0, 0)
+        grid = Grid(10,10)
+        grid.set_alive((0, 0))
+        grid.set_alive((0, 1))
+        grid.set_alive((1, 0))
+        grid.set_alive((1, 1))
+        return grid
+
+    def test_neighbours(self):
+        grid = self.create_test_scenario2()
+        print(grid.as_grid_string())
+        neighbours = grid.get_neighbours((0, 0))
+        self.assertEqual(len(neighbours), 8)
+
+    def test_live_neighbours(self):
+        grid = self.create_test_scenario2()
+        print(grid.as_grid_string())
+        self.assertEqual(grid.count_live_neighbours((9, 9)), 1)
+        self.assertEqual(grid.count_live_neighbours((1, 9)), 2)
+
     def test_create_grid(self):
-        grid = self.create_test_scenario()
+        grid = self.create_test_scenario1()
         self.assertTrue(grid)
         self.assertEqual(grid.count_live_neighbours((0, 0)), 1)
         self.assertEqual(grid.count_live_neighbours((0, 0)), 1)
