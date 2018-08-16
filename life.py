@@ -27,12 +27,15 @@ from tkinter import Tk, Canvas, mainloop
 import _thread
 import random
 
+WINDOW_WIDTH = 1024
+WINDOW_HEIGHT = 768
+
 class Life:
     def __init__(self, rows, cols):
         self.__grid = Grid(rows, cols)
         # window size
-        self.x = 1024 # 640
-        self.y = 768 # 480
+        self.x = WINDOW_WIDTH
+        self.y = WINDOW_HEIGHT
         self.rows = rows
         self.cols = cols
         self.y_scale = self.y / rows
@@ -145,4 +148,4 @@ class Life:
 
 if __name__ == '__main__':
     scale = 4
-    Life(768//scale, 1024//scale).play()
+    Life(WINDOW_HEIGHT//scale, WINDOW_WIDTH//scale).play()
